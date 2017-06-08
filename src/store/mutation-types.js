@@ -1,0 +1,8 @@
+export const HOME_ACTIVE = 'HOME_ACTIVE'
+export const LIST_ACTIVE = 'LIST_ACTIVE'
+export const SHOPCART_ACTIVE = 'SHOPCART_ACTIVE'
+export const MY_ACTIVE = 'MY_ACTIVE'
+export const HIDE_MENU = 'HIDE_MENU'
+export const CITY_LOCATION = 'CITY_LOCATION'
+export const ACCOUNT_LOGIN = 'ACCOUNT_LOGIN'
+export const REMEMBER_PHONE = 'REMEMBER_PHONE'

@@ -1,0 +1,79 @@
+// 绝对定位
+
+@mixin abs-pos ($top: auto, $right: auto, $bottom: auto, $left: auto) {
+  top: $top;
+  right: $right;
+  bottom: $bottom;
+  left: $left;
+  position: absolute;
+}
+
+//字体转rem
+@function calculateRem($size: 16) {
+  $remSize: $size / 20px;
+  @return $remSize * 1rem;
+}
+
+@mixin font-size($size) {
+  font-size: $size;
+  font-size: calculateRem($size);
+}
+
+
+// 清除浮动
+@mixin clearfix() {
+    &:before,
+    &:after {
+        content: "";
+        display: table;
+    }
+    &:after {
+        clear: both;
+    }
+}
+
+/// Make a context based selector a little more friendly
+/// @author Hugo Giraudel
+/// @param {String} $context
+/// 给元素添加一个类名
+@mixin when-inside($context) {
+  #{$context} & {
+    @content;
+  }
+}
+
+
+
+//增强媒体查询
+$breakpoints: (
+  'sm': 'only screen and  (min-width: 480px)',
+  'md': 'only screen and ( min-width: 768px)',
+  'lg': 'only screen and ( min-width: 992px)'
+) !default;
+
+
+@mixin respond-to($breakpoint) {
+  $query: map-get($breakpoints, $breakpoint);
+
+  @if not $query {
+    @error 'No value found for `#{$breakpoint}`. Please make sure it is defined in `$breakpoints` map.';
+  }
+
+  @media #{if(type-of($query) == 'string', unquote($query), inspect($query))} {
+    @content;
+  }
+}
+
+
+
+@function makelongshadow($color) {
+  $val: 0px 0px $color;
+  @for $i from 1 through 200 {
+    $val: #{$val}, #{$i}px #{$i}px #{$color};
+  }
+  @return $val;
+}
+
+@mixin longshadow($color) {
+  text-shadow: makelongshadow($color);
+}

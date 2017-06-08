@@ -1,0 +1,8 @@
+/* line 1, ../sass/test.scss */
+body {
+  height: 12px;
+}
+/* line 3, ../sass/test.scss */
+body .div {
+  width: 20px;
+}
