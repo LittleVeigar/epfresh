@@ -3,7 +3,7 @@ utf-8
 
 git clone https://github.com/LittleVeigar/epfresh.git?
 
-cd purchase
+cd epfresh
 
 npm install
 
