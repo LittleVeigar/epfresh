@@ -1,9 +1,9 @@
 
 utf-8 
 
-git clone https://github.com/LittleVeigar/epfresh.git?
+git clone https://github.com/bailicangdu/vue2-elm.git ?
 
-cd epfresh
+cd purchase
 
 npm install
 

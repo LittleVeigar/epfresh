@@ -380,7 +380,7 @@ export default {
       }
     },
     fetchData (id) {
-      getStoreload(id)
+      getStoreload(this.$store.state, {'storeId': id})
       .then(data => {
         console.log('data', data.data.response)
         this.storeInfo = data.data.response

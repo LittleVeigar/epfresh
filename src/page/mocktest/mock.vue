@@ -7,10 +7,11 @@
         <div id="container">
           <div id="movetarget">
             <ul>
-              <li v-for="i in 20">{{msg}}</li>
+              <li v-for="i in 5">{{msg}}</li>
             </ul>
           </div>
         </div>
+        <div id="r-result"></div>
   </div>
 </template>
 
@@ -69,10 +70,12 @@
       let myCity = new BMap.LocalCity()
       myCity.get(myFun)
       map.centerAndZoom(locat, 12)
-      var myIcon = new BMap.Icon('http://developer.baidu.com/map/jsdemo/img/fox.gif')
-      var marker = new BMap.Marker(locat, {icon: myIcon})// 创建标注
-      map.addOverlay(marker, 200)             // 将标注添加到地图中
-      marker.disableDragging()           // 不可拖拽
+      var myKeys = ['上海', '黄浦江']
+      var local = new BMap.LocalSearch('上海', {
+        renderOptions: {map: '上海', panel: 'r-result'},
+        pageCapacity: 5
+      })
+      local.searchInBounds(myKeys, map.getBounds())
     }
   }
 let movetarget = document.getElementById('movetarget')
@@ -115,4 +118,5 @@ h1, h2 {
   width: 100%;
   height: 300px;
 }
+#r-result{width:100%;}
 </style>

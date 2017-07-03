@@ -116,7 +116,7 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
+import { mapMutations, mapState } from 'vuex'
 import { getProfile } from '@/config/req'
 export default {
   name: 'Order',
@@ -129,11 +129,20 @@ export default {
     }
   },
   created () {
-    getProfile()
-    .then(data => {
-      let dat = data.data.response
-      this.headerImg = dat.avatar
-    })
+    if (!this.login) {
+      this.$router.push({ path: 'login' })
+    } else {
+      getProfile(this.$store.state, {'accountId': this.$store.state.accountId})
+      .then(data => {
+        let dat = data.data.response
+        this.headerImg = dat.avatar
+      })
+    }
+  },
+  computed: {
+    ...mapState([
+      'login'
+    ])
   },
   methods: {
     ...mapMutations([

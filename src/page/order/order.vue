@@ -400,7 +400,7 @@ export default {
       }
     },
     fetchData (id) {
-      getOrdersList({ type: id })
+      getOrdersList(this.$store.state, {'pageNumber': 0, 'accountId': 36, 'pageSize': 10, 'type': id})
       .then(data => {
         let dat = data.data.response.content
         console.log('orderlists:', dat)

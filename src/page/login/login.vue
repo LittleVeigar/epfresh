@@ -142,7 +142,7 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
     </div>
     <div class="login"  autocomplete="off" v-on:submit.prevent="submit">
       <div class="line">
-        <div :class="{dispn:show}" class="warn" id="warn">请输入手机号</div>
+        <div :class="{dispn:show}" class="warn" id="warn">{{errorInfo}}</div>
         <input id="phone" type="number" autocomplete="off"  placeholder="请输入手机号" v-model="form.id">
       </div>
       <div class="line line2">
@@ -157,7 +157,7 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
   </div>
 </template>
 <script>
-    const Cookie = require('js-cookie')
+    // const Cookie = require('js-cookie')
     import { loginAccount } from '@/config/req'
     import { mapMutations, mapActions, mapState } from 'vuex'
     export default {
@@ -167,7 +167,7 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
           btn: false,
           closed: false,
           show: true,
-          errorInfo: '',
+          errorInfo: '请输入手机号',
           form: {
             id: '',
             name: ''
@@ -211,7 +211,7 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
               this.$router.go(-1)
             } else if (data.data.error.errorInfo !== '') {
               this.show = false
-              document.getElementById('warn').innerHTML = data.data.error.errorInfo
+              this.errorInfo = data.data.error.errorInfo
               var _this = this
               setTimeout(function () {
                 _this.show = true
@@ -220,14 +220,14 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
           })
           if (this.form.id === '') {
             this.show = false
-            document.getElementById('warn').innerHTML = '请输入手机号'
+            this.errorInfo = '请输入手机号'
             var _this = this
             setTimeout(function () {
               _this.show = true
             }, 2000)
           } else if (this.form.name === '') {
             this.show = false
-            document.getElementById('warn').innerHTML = '请输入密码'
+            this.errorInfo = '请输入密码'
             var __this = this
             setTimeout(function () {
               __this.show = true
@@ -242,7 +242,6 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
       },
   mounted () {
         this.form.id = this.phone
-        console.log('login page cookie', Cookie.get())
         document.getElementsByTagName('html')[0].style.background = '#f5f5f5'
         document.querySelector('#app').style.marginBottom = '0'
         this.HOME_ACTIVE({ id: this.id })

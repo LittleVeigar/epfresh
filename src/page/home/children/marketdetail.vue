@@ -186,8 +186,6 @@
     watch: {
     },
     beforeRouteUpdate (to, from, next) {
-      console.log('before')
-      console.log(to)
       this.fetchData(parseInt(to.params.id) + 1)
       next()
     },
@@ -217,7 +215,7 @@
         this.browseButtonState = false
       },
       fetchData: function (id) {
-        getMarketLoad(id)
+        getMarketLoad(this.$store.state, {'id': id})
         .then(data => {
           let dat = data.data.response
           this.marketarea = dat.marketAreas

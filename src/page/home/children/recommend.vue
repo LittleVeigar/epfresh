@@ -287,8 +287,7 @@ export default {
       'HIDE_MENU'
     ]),
     fetchData: function () {
-      console.log('fetchData')
-      getHomeData()
+      getHomeData({cityId: '6401', lng: '106.27', lat: '38.47'})
       .then(data => {
         let dat = data.data.response
         this.fineList = dat.fineRecommendation.fineList
@@ -321,11 +320,7 @@ export default {
       }, 2000)
     },
     doTouchStart (e) {
-      console.log(e)
-      console.log('touchstart')
       this._startX = e.touches[0].pageX
-      console.log('touchstart')
-      console.log(this._startX)
     },
     doTouchMove (e) {
       this.currentX = e.touches[0].pageX
@@ -376,20 +371,9 @@ export default {
     this.HOME_ACTIVE({ id: this.id })
     this.HIDE_MENU({ hide: this.hide })
     this.fetchData()
-    getMarketAreas().then(function (data) {
+    getMarketAreas(this.$store.state, {'id': '2'}).then(function (data) {
     })
     this.screenWidth = screen.width
-    let element = document.getElementById('container')
-    element.addEventListener(touchEvent.eventStart, (e) => {
-      this.doTouchStart(e)
-    }, false)
-    element.addEventListener(touchEvent.eventMove, (e) => {
-      this.doTouchMove(e)
-    }, false)
-    element.addEventListener(touchEvent.eventEnd, (e) => {
-      this.doTouchEnd(e)
-      console.log('end')
-    }, false)
   },
   components: {
     Tabbar,
@@ -402,6 +386,19 @@ export default {
     InfiniteScroll,
     TabContainer,
     TabContainerItem
+  },
+  updated () {
+    let element = document.getElementById('container')
+    element.addEventListener(touchEvent.eventStart, (e) => {
+      this.doTouchStart(e)
+    }, false)
+    element.addEventListener(touchEvent.eventMove, (e) => {
+      this.doTouchMove(e)
+    }, false)
+    element.addEventListener(touchEvent.eventEnd, (e) => {
+      this.doTouchEnd(e)
+      console.log('end')
+    }, false)
   }
 }
 </script>

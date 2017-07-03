@@ -76,7 +76,7 @@
         this.selectCity = index
       },
       fetchData () {
-        getOpenCityAndMerAddress()
+        getOpenCityAndMerAddress(this.$store.state, {'version': 44})
         .then(data => {
           let dat = data.data.response
           this.citys = dat.city.cityList

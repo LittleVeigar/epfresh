@@ -478,8 +478,7 @@ ul li {
     <section class="menu-container" >
      <ul class="all-menu" id="all-menu"
       @touchstart="menutouchstart"
-      @touchmove="menutouchmove"
-      @touchend="menutouchend"
+      @touchmove="touchThrottle"
       @click = "clickAllmenus()"
       >
         <li v-for="(item, index) in contents"
@@ -492,11 +491,10 @@ ul li {
     </section>
     <div class="parent">
     <section class="container">
-      <div class="sidebar" v-focus id="sidebar" ontouchstart = "onTouchStart">
+      <div class="sidebar" v-focus id="sidebar" >
         <ul
           @touchstart="sidebarTouchstart"
           @touchmove="sidebarTouchmove"
-          @touchend="sidebarTouchend"
           @click = "clickSidebarmenus()"
           class="sidebar-menu" id="sidebar-menu">
           <li
@@ -587,8 +585,6 @@ ul li {
 </template>
 
 <script>
-import Vue from 'vue'
-import alloytouch from 'alloytouch'
 import greyArrow from './search_icon.svg'
 import pullDown from './pull-down_icon.svg'
 import { Toast, Indicator, Loadmore } from 'mint-ui'
@@ -613,6 +609,7 @@ export default {
       viewSelect: false,
       allLoaded: false,
       isMove: false,
+      sidebarIsMove: false,
       filterDialog: true,
       selectedClassifies: null,
       topStatus: 'drop',
@@ -724,13 +721,15 @@ export default {
             arr.push(keys[i])
           }
         }
-        getPartproductList({categoryId: this.sidebarmenu_id, topCategoryId: this.topmenu_index, nameIds: arr, state: this.$store.state})
+        let params = {'categoryId': this.sidebarmenu_id, 'categoryType': 1, 'topCategoryId': this.topmenu_index, 'type': 1, 'nameIds': arr, 'selected': '', 'pageSize': 15, 'pageNumber': 0}
+        getPartproductList(params, this.$store.state)
         .then(data => {
           let dat = data.data.response
           this.products = dat
         })
       } else {
-        getPartproductList({categoryId: this.sidebarmenu_id, topCategoryId: this.topmenu_index, state: this.$store.state})
+        let params = {'categoryId': this.sidebarmenu_id, 'categoryType': 1, 'topCategoryId': this.topmenu_index, 'type': 1, 'nameIds': '', 'selected': '', 'pageSize': 15, 'pageNumber': 0}
+        getPartproductList(params, this.$store.state)
         .then(data => {
           let dat = data.data.response
           this.products = dat
@@ -760,7 +759,8 @@ export default {
     },
     getSelected () {
       this.init()
-      getPartproductList({categoryId: this.sidebarmenu_id, topCategoryId: this.topmenu_index, selected: !this.viewSelect, state: this.$store.state})
+      let params = {'categoryId': this.sidebarmenu_id, 'categoryType': 1, 'topCategoryId': this.topmenu_index, 'type': 1, 'nameIds': '', 'selected': !this.viewSelect, 'pageSize': 15, 'pageNumber': 0}
+      getPartproductList(params, this.$store.state)
       .then(data => {
         let dat = data.data.response
         this.products = dat
@@ -798,7 +798,6 @@ export default {
         this.marketids.push(marketid)
         this.$set(this.select, marketid, false)
       }
-      console.log('len', this.select[1])
     },
     fetchData (ids, marketid) {
       getTree4purchaser(marketid, this.$store.state)
@@ -810,14 +809,15 @@ export default {
       .then(dat => {
         this.topmenu_index = dat[0].id
         this.sidebarmenu_id = dat[0].categories[0].id
-        return getPartproductList({categoryId: dat[0].categories[0].id, topCategoryId: dat[0].id, state: this.$store.state})
+        let params = {'categoryId': dat[0].categories[0].id, 'categoryType': 1, 'topCategoryId': dat[0].id, 'type': 1, 'nameIds': '', 'selected': !this.viewSelect, 'pageSize': 15, 'pageNumber': 0}
+        return getPartproductList(params, this.$store.state)
       })
       .then(data => {
         let dat = data.data.response
         return dat
       })
       .then(products => {
-        getShoppingCarCntNew(this.$store.state)
+        getShoppingCarCntNew(this.$store.state, {'cityId': '6401', 'accountId': this.$store.state.accountId})
         .then(data => {
           this.shoppingCar = data.data.response
           console.log(typeof products.content)
@@ -835,7 +835,7 @@ export default {
           this.$set(this.products, content, content)
         })
       })
-      getMarketlist4purchaser(ids)
+      getMarketlist4purchaser(this.$store.state, {'marketIds': ids})
       .then(data => {
         this.marketlist = data.data.response
         let select = true
@@ -846,7 +846,7 @@ export default {
       })
     },
     gainCartCnt () {
-      getShoppingCarCntNew(this.$store.state)
+      getShoppingCarCntNew(this.$store.state, {'cityId': '6401', 'accountId': this.$store.state.accountId})
       .then(data => {
         this.shoppingCar = data.data.response
         let content = this.products.content
@@ -938,7 +938,8 @@ export default {
         this.sidebarlists = this.contents[index].categories
         this.topmenu_index = id
         this.sidebarmenu_id = this.sidebarlists[0].id
-        getPartproductList({categoryId: firstid, topCategoryId: id, state: this.$store.state})
+        let params = {'categoryId': firstid, 'categoryType': 1, 'topCategoryId': id, 'type': 1, 'nameIds': '', 'selected': '', 'pageSize': 15, 'pageNumber': 0}
+        getPartproductList(params, this.$store.state)
         .then(data => {
           let dat = data.data.response
           this.products = dat
@@ -947,14 +948,16 @@ export default {
       }
     },
     clickSidebarmenus () {
-      this.init()
+      document.body.scrollTop = 0
+      this.clearClassify()
       let ev = ev || window.event
       let target = ev.target || ev.srcElement
       if (target.nodeName.toLowerCase() === 'li') {
         let id = target.dataset.id
         this.sidebarmenu_index = target.dataset.index
         this.sidebarmenu_id = id
-        getPartproductList({categoryId: id, topCategoryId: this.topmenu_index, state: this.$store.state})
+        let params = {'categoryId': id, 'categoryType': 1, 'topCategoryId': this.topmenu_index, 'type': 1, 'nameIds': '', 'selected': '', 'pageSize': 15, 'pageNumber': 0}
+        getPartproductList(params, this.$store.state)
         .then(data => {
           let dat = data.data.response
           this.products = dat
@@ -962,72 +965,62 @@ export default {
       }
     },
     menutouchstart (e) {
+      this.isMove = true
       this.menu_startX = e.touches[0].pageX
       this.menu_leftend = document.getElementById('all-menu').scrollWidth - document.body.clientWidth + 20
+      this.menu_trans = this.getTransformNum(window.getComputedStyle(document.querySelector('.all-menu'), null).transform, 4)
     },
     menutouchmove (e) {
-      this.menu_currentX = e.touches[0].pageX
-      let mDistance = this.menu_currentX - this.menu_startX
-      this.menu_mDistance = this.menu_currentX - this.menu_startX
-      let transnum = (this.menu_trans + mDistance * 0.6)
-      if (Math.abs(this.menu_mDistance) > 50) {
+      if (this.isMove) {
+        this.menu_currentX = e.touches[0].pageX
+        let mDistance = this.menu_currentX - this.menu_startX
+        this.menu_mDistance = mDistance
+        let transnum = 0
+        transnum = (this.menu_trans + mDistance)
         e.preventDefault()
-      }
-      if (transnum > 0) {
-        // this.menu_trans = 0
-        document.querySelector('.all-menu').style.transform = 'translate3d( ' + transnum + 'px,0,0)'
-      } else if (transnum < -this.menu_leftend) {
-        document.querySelector('.all-menu').style.transform = 'translate3d( ' + transnum + 'px,0,0)'
-      } else {
-        if (Math.abs(this.menu_mDistance) > 10) {
+        if (transnum <= 0 && transnum > -this.menu_leftend) {
           document.querySelector('.all-menu').style.transform = 'translate3d( ' + transnum + 'px,0,0)'
         }
       }
     },
-    menutouchend (e) {
-      this.menu_endX = e.changedTouches[0].pageX
-      this.menu_mDistance = this.menu_endX - this.menu_startX
-      let transnum = (this.menu_trans + this.menu_mDistance * 0.4)
-      if (transnum > 20) {
-        this.menu_trans = 0
-        document.querySelector('.all-menu').style.transform = 'translate3d(0,0,0)'
-      } else if (transnum < -this.menu_leftend - 20) {
-        document.querySelector('.all-menu').style.transform = 'translate3d( ' + -this.menu_leftend + 'px,0,0)'
-      } else {
-        if (Math.abs(this.menu_mDistance) > 10) {
-          document.querySelector('.all-menu').style.transform = 'translate3d( ' + transnum + 'px,0,0)'
-        }
+    throttle (method, context, time) {
+      return function (method, context, time) {
+        clearTimeout(method.tId)
+        method.tId = setTimeout(function () {
+          method.call(context)
+        }, time)
       }
+    },
+    touchThrottle (e) {
+      this.throttle(this.menutouchmove(e), this, 50)
     },
     sidebarTouchstart (e) {
+      this.sidebarIsMove = true
       this.sidebar_startY = e.touches[0].pageY
+      this.sidebar_trans = this.getTransformNum(window.getComputedStyle(document.querySelector('.sidebar-menu'), null).transform, 5)
       let scrollHeight = document.getElementById('sidebar').scrollHeight
-      let bodyHeight = document.body.offsetHeight
-      if (scrollHeight > bodyHeight) {
-        this.sidebar_bottomend = document.getElementById('sidebar').scrollHeight - document.body.offsetHeight + 135
+      let bodyHeight = document.documentElement.clientHeight
+      console.log('scrollHeight', scrollHeight)
+      console.log('bodyHeight', bodyHeight)
+      if (scrollHeight > bodyHeight - 135) {
+        this.sidebar_bottomend = document.getElementById('sidebar').scrollHeight - document.documentElement.clientHeight + 135
       } else {
         this.sidebar_bottomend = 0
       }
     },
     sidebarTouchmove (e) {
-      e.preventDefault()
-      this.sidebar_currentY = e.touches[0].pageY
-      this.sidebar_mDistance = this.sidebar_currentY - this.sidebar_startY
-      let transnum = (this.sidebar_trans + this.sidebar_mDistance * 0.6)
-      if (transnum > 0) {
-        this.sidebar_trans = 0
-        document.querySelector('.sidebar-menu').style.transform = 'translate3d(0,0,0)'
-      } else if (transnum < -this.sidebar_bottomend + 20) {
-        document.querySelector('.sidebar-menu').style.transform = 'translate3d( 0,' + -this.sidebar_bottomend + 'px,0)'
-      } else {
+      if (this.sidebarIsMove) {
+        e.preventDefault()
+        this.sidebar_currentY = e.touches[0].pageY
+        this.sidebar_mDistance = this.sidebar_currentY - this.sidebar_startY
         if (Math.abs(this.sidebar_mDistance) > 10) {
-          document.querySelector('.sidebar-menu').style.transform = 'translate3d( 0,' + transnum + 'px,0)'
+          let transnum = (this.sidebar_trans + this.sidebar_mDistance)
+          console.log(this.sidebar_bottomend)
+          if (transnum <= 0 && transnum > -this.sidebar_bottomend) {
+            document.querySelector('.sidebar-menu').style.transform = 'translate3d( 0,' + transnum + 'px,0)'
+          }
         }
       }
-    },
-    sidebarTouchend (e) {
-      this.sidebar_endY = e.changedTouches[0].pageY
-      this.sidebar_trans = this.getTransformNum(window.getComputedStyle(document.querySelector('.sidebar-menu'), null).transform, 5)
     },
     getTransformNum (str, num) {
       let trans = str.replace(/[^0-9\-\.,]/g, '').split(',')
@@ -1083,7 +1076,6 @@ export default {
     Loadmore
   },
   mounted () {
-    console.log(this.$store.state)
     this.HOME_ACTIVE({ id: this.id })
     this.HIDE_MENU({ hidemenu: this.hide })
     this.fetchData(['2'], [1])
@@ -1096,19 +1088,14 @@ export default {
   directives: {
     focus: {
       bind: function (el) {
-        console.log('bind')
       },
       inserted: function (el) {
-        console.log('inserted')
       },
       update: function (el) {
-        console.log('update')
       },
       componentUpdated: function (el) {
-        console.log('componentUpdated')
       },
       unbind: function (el) {
-        console.log('unbind')
       }
     }
 

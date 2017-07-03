@@ -152,7 +152,7 @@ export default {
     searchChange () {
     },
     Search () {
-      getSearchOrders({ 'key': this.searchText })
+      getSearchOrders(this.$store.state, {'pageNumber': 0, 'accountId': 36, 'pageSize': 10, 'key': this.searchText, 'type': ''})
       console.log('search', this.searchText)
       console.log(this.historyList instanceof Array)
       this.historyList.push(this.searchText)

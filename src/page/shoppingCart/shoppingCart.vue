@@ -552,7 +552,7 @@ export default {
       console.log('login create', this.login)
       console.log('login create', this.accountId)
       console.log('login create', this.token)
-      getListShoppingCar(this.$store.state)
+      getListShoppingCar(this.$store.state, {'accountId': this.accountId, 'cityId': 6401})
       .then(data => {
         let dat = data.data.response
         dat.content.forEach(function (item, index) {
@@ -719,7 +719,7 @@ export default {
           let list = []
           let selected = isSelected ? 0 : 1
           list.push({id, isSelected: selected})
-          updateShoppingCarSelected(list)
+          updateShoppingCarSelected({'list': list}, this.$store.state)
           this.content.content.forEach(function (item, index) {
             item.result.forEach(function (product, index) {
               if (parseInt(product.id) === parseInt(id)) {
@@ -812,7 +812,7 @@ export default {
               list.push({id: product.id, isSelected: 0})
             })
           })
-          updateShoppingCarSelected(list)
+          updateShoppingCarSelected({'list': list}, this.$store.state)
         } else {
           let list = []
           this.unChecked = true
@@ -824,7 +824,7 @@ export default {
               list.push({id: product.id, isSelected: 1})
             })
           })
-          updateShoppingCarSelected(list)
+          updateShoppingCarSelected({'list': list}, this.$store.state)
         }
       } else {
         if (this.didAllChecked()) {
@@ -848,12 +848,12 @@ export default {
         this.showToast()
       } else {
         this.content.content[pindex].result[cindex].productCount = count - parseInt(inc)
-        updateShoppingCarProductCount({id, num: this.content.content[pindex].result[cindex].productCount})
+        updateShoppingCarProductCount({'id': id, 'productCount': this.content.content[pindex].result[cindex].productCount}, this.$store.state)
       }
     },
     incr ({ pindex, cindex, inc, id, num }) {
       this.content.content[pindex].result[cindex].productCount = parseFloat(parseFloat(this.content.content[pindex].result[cindex].productCount + inc).toFixed(1))
-      updateShoppingCarProductCount({id, num: this.content.content[pindex].result[cindex].productCount})
+      updateShoppingCarProductCount({'id': id, 'productCount': this.content.content[pindex].result[cindex].productCount}, this.$store.state)
     },
     countClick ({ pindex, cindex, inc, id, num }) {
       this.modifyDialog = Object.assign({pindex, cindex, inc, id, num})
@@ -879,7 +879,7 @@ export default {
       let cindex = this.modifyDialog.cindex
       let id = this.modifyDialog.id
       this.content.content[pindex].result[cindex].productCount = this.modifyDialog.num
-      updateShoppingCarProductCount({id, num: this.content.content[pindex].result[cindex].productCount})
+      updateShoppingCarProductCount({'id': id, 'productCount': this.content.content[pindex].result[cindex].productCount}, this.$store.state)
       this.modifyCancel()
     },
     showToast () {
@@ -889,7 +889,7 @@ export default {
       })
     },
     fetchData () {
-      getListShoppingCar(this.$store.state)
+      getListShoppingCar(this.$store.state, {'accountId': this.accountId, 'cityId': 6401})
       .then(data => {
         let dat = data.data.response
         dat.content.forEach(function (item, index) {
@@ -913,12 +913,12 @@ export default {
       this.content.content.forEach(function (item, index) {
         item.result.forEach(function (product, index) {
           if (product.willDele) {
-            ids.push(product.id)
+            ids.push(product.id + '')
           }
         })
       })
       this.hideDeleteDialog()
-      delFromShoppingCar(ids)
+      delFromShoppingCar({'ids': ids, 'cityId': '6401', 'accountId': this.accountId}, this.$store.state)
     }
   },
   mounted () {

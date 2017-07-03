@@ -184,7 +184,7 @@ a {
       @touchcancle="dotouchcancle"
       @touchend="dotouchend">
       <div class="store-item" v-for="item in didContent">
-        <div class="store">
+        <div class="store" @click="toStore(item[0].id)">
           <div class="store-logo">
             <img  :src="[item[0].headerImage ? item[0].headerImage : overhead]">
             <img class="store-status-icon" :src="statusIcon({isAcceptOrders: item[0].isAcceptOrders, recType: item[0].recType})">
@@ -200,7 +200,7 @@ a {
             </div>
           </div>
         </div>
-        <div class="store">
+        <div class="store" @click="toStore(item[1].id)">
           <div class="store-logo">
             <img  :src="[item[1].headerImage ? item[1].headerImage : overhead]">
             <img class="store-status-icon" :src="statusIcon({isAcceptOrders: item[1].isAcceptOrders, recType: item[1].recType})">
@@ -289,7 +289,7 @@ export default {
       'HIDE_MENU'
     ]),
     fetchData (pn) {
-      getStoreList({pn: pn})
+      getStoreList(this.$store.state, {'marketId': '', 'pageNumber': pn, 'sortProperty': 'name', 'sortDirection': 'DESC', 'favorite': '', 'areaId': ''})
       .then(data => {
         let content = data.data.response.content
         this.totalPages = data.data.response.totalPages
@@ -297,6 +297,9 @@ export default {
         this.content = content
         console.log('store', content)
       })
+    },
+    toStore (id) {
+      this.$router.push({name: 'Store', params: {id: id}})
     },
     showToast () {
       Toast('这是一个Toast！')
@@ -375,7 +378,7 @@ export default {
       document.querySelector('.store-container').style.transform = 'translate3d( 0,0,0)'
       this.currentPage = this.currentPage + 1
       if (this.currentPage < this.totalPages) {
-        getStoreList({pn: this.currentPage})
+        getStoreList(this.$store.state, {'marketId': '', 'pageNumber': this.currentPage, 'sortProperty': 'name', 'sortDirection': 'DESC', 'favorite': '', 'areaId': ''})
         .then(data => {
           dropBottomText[0].innerHTML = this.template.success
           this.bottomNone = true
