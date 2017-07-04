@@ -721,14 +721,14 @@ export default {
             arr.push(keys[i])
           }
         }
-        let params = {'categoryId': this.sidebarmenu_id, 'categoryType': 1, 'topCategoryId': this.topmenu_index, 'type': 1, 'nameIds': arr, 'selected': '', 'pageSize': 15, 'pageNumber': 0}
+        let params = {'categoryId': this.sidebarmenu_id + '', 'categoryType': '1', 'topCategoryId': this.topmenu_index + '', 'type': '1', 'nameIds': arr, 'selected': '', 'pageSize': 15, 'pageNumber': 0}
         getPartproductList(params, this.$store.state)
         .then(data => {
           let dat = data.data.response
           this.products = dat
         })
       } else {
-        let params = {'categoryId': this.sidebarmenu_id, 'categoryType': 1, 'topCategoryId': this.topmenu_index, 'type': 1, 'nameIds': '', 'selected': '', 'pageSize': 15, 'pageNumber': 0}
+        let params = {'categoryId': this.sidebarmenu_id + '', 'categoryType': '1', 'topCategoryId': this.topmenu_index + '', 'type': '1', 'nameIds': '', 'selected': '', 'pageSize': 15, 'pageNumber': 0}
         getPartproductList(params, this.$store.state)
         .then(data => {
           let dat = data.data.response
@@ -809,7 +809,7 @@ export default {
       .then(dat => {
         this.topmenu_index = dat[0].id
         this.sidebarmenu_id = dat[0].categories[0].id
-        let params = {'categoryId': dat[0].categories[0].id, 'categoryType': 1, 'topCategoryId': dat[0].id, 'type': 1, 'nameIds': '', 'selected': !this.viewSelect, 'pageSize': 15, 'pageNumber': 0}
+        let params = {'categoryId': dat[0].categories[0].id, 'categoryType': 1, 'topCategoryId': dat[0].id, 'type': 1, 'selected': !this.viewSelect, 'pageSize': 15, 'pageNumber': 0}
         return getPartproductList(params, this.$store.state)
       })
       .then(data => {
@@ -821,6 +821,7 @@ export default {
         .then(data => {
           this.shoppingCar = data.data.response
           console.log(typeof products.content)
+          console.log('shoppingCar', data.data.response)
           let content = products.content
           content.forEach((product) => {
             let productCnt = this.shoppingCar.productCnt
@@ -938,7 +939,7 @@ export default {
         this.sidebarlists = this.contents[index].categories
         this.topmenu_index = id
         this.sidebarmenu_id = this.sidebarlists[0].id
-        let params = {'categoryId': firstid, 'categoryType': 1, 'topCategoryId': id, 'type': 1, 'nameIds': '', 'selected': '', 'pageSize': 15, 'pageNumber': 0}
+        let params = {'categoryId': firstid + '', 'categoryType': '1', 'topCategoryId': id + '', 'type': '1', 'pageSize': 15, 'pageNumber': 0}
         getPartproductList(params, this.$store.state)
         .then(data => {
           let dat = data.data.response
@@ -956,7 +957,7 @@ export default {
         let id = target.dataset.id
         this.sidebarmenu_index = target.dataset.index
         this.sidebarmenu_id = id
-        let params = {'categoryId': id, 'categoryType': 1, 'topCategoryId': this.topmenu_index, 'type': 1, 'nameIds': '', 'selected': '', 'pageSize': 15, 'pageNumber': 0}
+        let params = {'categoryId': id, 'categoryType': 1, 'topCategoryId': this.topmenu_index, 'type': 1, 'pageSize': 15, 'pageNumber': 0}
         getPartproductList(params, this.$store.state)
         .then(data => {
           let dat = data.data.response

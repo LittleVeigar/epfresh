@@ -79,7 +79,7 @@ const getProductList = () => { return Post({'cmd': 'product/list'}) }
  * @param  {[type]} options.state         [description]
  * @return {[type]}                       [description]
  */
-const getPartproductList = (store, params) => { return Post({'cmd': 'product/list', 'parameters': params}) }
+const getPartproductList = (params, store) => { return Post({'cmd': 'product/list', 'token': store.token, 'parameters': params}) }
 /**
  * [getMarketList 批发市场列表]
  * @return {[type]} [description]
