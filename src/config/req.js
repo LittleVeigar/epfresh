@@ -56,7 +56,7 @@ const getHomeData = (params) => { return Post({'cmd': 'homepage/queryAct', 'para
  * [getDcStores 店铺列表 散货代采]
  * @return {[type]} [description]
  */
-const getDcStores = () => { return Post({'cmd': 'store\/dcStores', 'token': '46db84cb534f49d4af52dde9e647e5ed', 'parameters': {'statuses': [2, 3], 'groupByMarket': false}}) }
+const getDcStores = (store) => { return Post({'cmd': 'store\/dcStores', 'token': store.token, 'parameters': {'statuses': [2, 3], 'groupByMarket': false}}) }
 
 /**
  * [getProfile 获取个人信息]

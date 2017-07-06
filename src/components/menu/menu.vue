@@ -62,35 +62,13 @@ a:link {
 </section>
 </template>
 <script>
-import myOrder from '@/assets/images/myOrder_icon.png'
-import preSale from '@/assets/images/pre-sale_icon.png'
-import address from '@/assets/images/address_icon.png'
-import addDistraputionCenter from '@/assets/images/addDistraputionCenter_icon.png'
-import { getDcStores } from '@/config/req'
 import { Swipe, SwipeItem } from 'mint-ui'
 export default {
   data () {
     return {
       index: 0,
       width: 0,
-      menus: [
-        {
-          name: '我的订单',
-          logoUrl: myOrder
-        },
-        {
-          name: '预售商品',
-          logoUrl: preSale
-        },
-        {
-          name: '收货地址',
-          logoUrl: address
-        },
-        {
-          name: '添加配送中心',
-          logoUrl: addDistraputionCenter
-        }
-      ]
+      menus: []
     }
   },
   props: {
@@ -99,49 +77,16 @@ export default {
       default: false
     },
     list: {
-      type: Array
+      type: Array,
+      required: true
     }
-  },
-  created () {
-    this.fetchData()
   },
   ready () {
     this.width = document.documentElement.getBoundingClientRect().width
   },
   computed: {
     didMenus: function () {
-      return this.$lodash.chunk(this.menus, 4)
-    }
-  },
-  methods: {
-    fetchData () {
-      getDcStores()
-      .then(data => {
-        console.log(data.data.response)
-        let rep = data.data.response
-        let menus = this.$lodash(this.menus.slice(0, 3)).concat(rep, this.menus.splice(3))
-        this.menus = menus.value()
-        console.log(menus.value())
-      })
-    },
-    start (e) {
-      this.xy = e.touches[0].clientX
-    },
-    move (e) {
-      this.zz = e.touches[0].clientX - this.xy
-      this.position = this.zz + this.tmp
-    },
-    end (e) {
-      if (this.zz < -100) { //  right
-        if (this.index < this.list.length - 1) {
-          this.index++
-        }
-      } else if (this.zz > 100) { //  left
-        if (this.index > 0) {
-          this.index--
-        }
-      }
-      this.tmp = this.position = -this.index * this.width
+      return this.$lodash.chunk(this.list, 4)
     }
   },
   components: {

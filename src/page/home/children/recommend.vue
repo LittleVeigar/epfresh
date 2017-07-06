@@ -171,7 +171,7 @@ section {
       <mt-swipe-item v-for="item in topBanner"><a :href="item.link"><img class="banner" :src="item.img" :alt="item.title"></a></mt-swipe-item>
     </mt-swipe>
     </div>
-  <menu-ep></menu-ep>
+  <menu-ep v-bind:list="menus"></menu-ep>
   <section v-if="fineList.length">
     <div class="recomendation">
         <span class="perfect"><img class="perfect-img" src="../../../assets/images/perfect_icon.png">品推荐</span>
@@ -230,20 +230,23 @@ import { Toast, Indicator, InfiniteScroll, Tabbar, TabItem, TabContainer, TabCon
 import epHeader from '@/components/header/header'
 import NavBar from '@/components/navbar/navbar'
 import MenuEp from '@/components/menu/menu'
+import myOrder from '@/assets/images/myOrder_icon.png'
+import preSale from '@/assets/images/pre-sale_icon.png'
+import address from '@/assets/images/address_icon.png'
+import addDistraputionCenter from '@/assets/images/addDistraputionCenter_icon.png'
 
-import { getHomeData, getMarketAreas, getMarketList } from '@/config/req'
-import { setStore } from '@/config/utils'
+import { getHomeData, getMarketAreas, getMarketList, getDcStores } from '@/config/req'
 
-const $hasTouch = 'ontouchstart' in window
+/* const $hasTouch = 'ontouchstart' in window
 let eventStart = $hasTouch ? 'touchstart' : 'mousedown'
 let eventEnd = $hasTouch ? 'touchend' : 'mouseup'
 let eventMove = $hasTouch ? 'touchmove' : 'mousemove'
 let eventResize = $hasTouch ? 'orientationchange' : 'resize'
-let eventcancel = $hasTouch ? 'touchcancel' : 'mouseup'
+let eventcancel = $hasTouch ? 'touchcancel' : 'mouseup' */
 
-let touchEvent = {
+/* let touchEvent = {
   eventStart: eventStart, eventEnd: eventEnd, eventMove: eventMove, eventResize: eventResize, eventcancel: eventcancel
-}
+} */
 export default {
   name: 'recomend',
   data () {
@@ -264,6 +267,24 @@ export default {
       shopList: ' ',
       id: 1,
       hide: false,
+      menus: [
+        {
+          name: '我的订单',
+          logoUrl: myOrder
+        },
+        {
+          name: '预售商品',
+          logoUrl: preSale
+        },
+        {
+          name: '收货地址',
+          logoUrl: address
+        },
+        {
+          name: '添加配送中心',
+          logoUrl: addDistraputionCenter
+        }
+      ],
       marketlist: ['haha', '天天鲜', '北环']
     }
   },
@@ -300,6 +321,12 @@ export default {
         let dat = data.data.response
         this.marketlist = dat
       })
+      getDcStores(this.$store.state)
+      .then(data => {
+        let erp = data.data.response
+        let lastmenus = this.menus.splice(3)
+        this.menus = this.menus.splice(0, 3).concat(erp, lastmenus)
+      })
     },
     toStore (id) {
       this.$router.push({name: 'Store', params: {id: id}})
@@ -319,39 +346,8 @@ export default {
         Indicator.close()
       }, 2000)
     },
-    doTouchStart (e) {
-      this._startX = e.touches[0].pageX
-    },
-    doTouchMove (e) {
-      this.currentX = e.touches[0].pageX
-      this._mDistance = this.currentX - this._startX
-      this.width = this._mDistance / this.screenWidth
-      setStore('width', 100)
-      document.querySelector('.slider').style.transform = 'translateX(' + this.screenWidth * (this.index - this.width) * 0.33 + 'px)'
-    },
     ToProductDetail (id) {
       window.location.href = 'http://mtest.epfresh.com/common/product.html?#' + id + '&6401'
-    },
-    doTouchEnd (e) {
-      this._endX = e.changedTouches[0].pageX
-      this._mDistance = this._endX - this._startX
-      this.width = this._mDistance / this.screenWidth
-      if (this.width > 0.5 || this.width < -0.5) {
-        if (this.width > 0 && this.index !== 0) {
-          this.index = this.index - 1
-        } else if (this.index === 0) {
-          this.index = 2
-        } else if (this.index !== 2) {
-          this.index = this.index + 1
-        } else {
-          this.index = 0
-        }
-        console.log(this.index)
-        this.width = 0
-      } else {
-        this.width = 0
-      }
-      document.querySelector('.slider').style.transform = 'translateX(' + this.screenWidth * this.index * 0.33 + 'px)'
     },
     selected (e) {
       this.active = 'tab-container3'
@@ -370,7 +366,6 @@ export default {
   mounted () {
     this.HOME_ACTIVE({ id: this.id })
     this.HIDE_MENU({ hide: this.hide })
-    this.fetchData()
     getMarketAreas(this.$store.state, {'id': '2'}).then(function (data) {
     })
     this.screenWidth = screen.width
@@ -386,19 +381,6 @@ export default {
     InfiniteScroll,
     TabContainer,
     TabContainerItem
-  },
-  updated () {
-    let element = document.getElementById('container')
-    element.addEventListener(touchEvent.eventStart, (e) => {
-      this.doTouchStart(e)
-    }, false)
-    element.addEventListener(touchEvent.eventMove, (e) => {
-      this.doTouchMove(e)
-    }, false)
-    element.addEventListener(touchEvent.eventEnd, (e) => {
-      this.doTouchEnd(e)
-      console.log('end')
-    }, false)
   }
 }
 </script>

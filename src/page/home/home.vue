@@ -262,7 +262,7 @@ export default {
       })
     },
     changMarkets () {
-      console.log('changMarkets                   ')
+      console.log('changMarkets')
       this.showMarket = !this.showMarket
     },
     showToast () {
