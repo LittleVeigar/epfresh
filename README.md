@@ -1,7 +1,7 @@
 
 utf-8 
 
-git clone https://github.com/bailicangdu/vue2-elm.git ?
+git clone https://github.com/LittleVeigar/epfresh
 
 cd purchase
 
