@@ -296,7 +296,8 @@ export default {
   computed: {
     ...mapState([
       'menuIndex',
-      'hidemenu'
+      'hidemenu',
+      'city_code'
     ]),
     changeCity: function () {
 
@@ -308,7 +309,7 @@ export default {
       'HIDE_MENU'
     ]),
     fetchData: function () {
-      getHomeData({cityId: '6401', lng: '106.27', lat: '38.47'})
+      getHomeData({cityId: this.city_code, lng: '106.27', lat: '38.47'})
       .then(data => {
         let dat = data.data.response
         this.fineList = dat.fineRecommendation.fineList

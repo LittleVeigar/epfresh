@@ -281,7 +281,7 @@ li {
             <div>暂无订单</div>
           </div>
         </div>
-        <div v-else class="item" v-for = "(item, index) in content" :key="index">
+        <div v-else class="item" v-for = "(item, index) in content" :key="index" @click="goOrderdetail(item.orderId)">
          <div class="order-title">
           <div>
              <span>
@@ -348,6 +348,8 @@ li {
  -->
   </div>
 </template>
+
+?token=f7e66d7f93284e0a8cb132621e6f6e67&accountId=36&cityId=31&orderId=11595&cid=00000000-01c2-ab32-0000-00000a892960
 <script>
 import { getOrdersList } from '@/config/req'
 import { mapMutations } from 'vuex'
@@ -431,6 +433,9 @@ export default {
           break
       }
       document.querySelector('.slider').style.transform = 'translateX(' + this.screenWidth * this.index * 0.2 + 'px)'
+    },
+    goOrderdetail (orderId) {
+      window.location.href = 'http://mtest.epfresh.com/purchase/order_detail.html?token=' + this.$store.state.token + '&accountId=' + this.$store.state.accountId + '&cityId=6401&orderId=' + orderId + '&cid=00000000-01c2-ab32-0000-00000a892960'
     },
     showToast () {
       Toast('这是一个Toast！')

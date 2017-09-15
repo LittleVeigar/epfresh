@@ -606,7 +606,7 @@ export default {
       marketids: [],
       selectAll: true,
       id: 2,
-      viewSelect: false,
+      viewSelect: true,
       allLoaded: false,
       isMove: false,
       sidebarIsMove: false,
@@ -807,19 +807,23 @@ export default {
         return dat
       })
       .then(dat => {
+        console.log('dat', dat)
         this.topmenu_index = dat[0].id
         this.sidebarmenu_id = dat[0].categories[0].id
-        let params = {'categoryId': dat[0].categories[0].id, 'categoryType': 1, 'topCategoryId': dat[0].id, 'type': 1, 'selected': !this.viewSelect, 'pageSize': 15, 'pageNumber': 0}
+        let params = {'categoryId': dat[0].categories[0].id, 'categoryType': 3, 'topCategoryId': dat[0].id, 'type': 1, 'selected': !this.viewSelect, 'pageSize': 15, 'pageNumber': 0}
         return getPartproductList(params, this.$store.state)
       })
       .then(data => {
         let dat = data.data.response
+        console.log('datttt', data)
         return dat
       })
       .then(products => {
+        console.log('products:', products)
         getShoppingCarCntNew(this.$store.state, {'cityId': '6401', 'accountId': this.$store.state.accountId})
         .then(data => {
           this.shoppingCar = data.data.response
+          console.log('products:', products)
           console.log(typeof products.content)
           console.log('shoppingCar', data.data.response)
           let content = products.content
@@ -1079,7 +1083,7 @@ export default {
   mounted () {
     this.HOME_ACTIVE({ id: this.id })
     this.HIDE_MENU({ hidemenu: this.hide })
-    this.fetchData(['2'], [1])
+    this.fetchData(['-2'], [])
   },
   updated () {
     this.$refs.mask.style['height'] = document.body.clientHeight + 'px'

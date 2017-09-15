@@ -65,13 +65,13 @@
         </div>
         <img class="item-arrow" src="../../assets/images/grey-arrow.png">
       </div>
-      <a href="http://mtest.epfresh.com/purchase/ep_classroom.html" class="profile-item">
+      <div class="profile-item">
         <div class="item-main">
           <img src="../../assets/images/classroom.png">
-          <span class="item-text">e批课堂</span>
+          <span class="item-text">常见问题</span>
         </div>
         <img class="item-arrow" src="../../assets/images/grey-arrow.png">
-      </a>
+      </div>
             <div class="profile-item">
         <div class="item-main">
           <img src="../../assets/images/certification.png">

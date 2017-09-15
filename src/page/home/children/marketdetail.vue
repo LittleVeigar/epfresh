@@ -146,7 +146,7 @@
         <div v-for="(item,index) in marketarea" class="area_item" v-bind:key="index">
           <div :id="'area'+index" class="item_title">{{item.name}}</div>
           <div class="stores_container">
-              <div v-for="(store,index) in item.stores" class="item_container">
+              <div v-for="(store,index) in item.stores" class="item_container" @click="toStore(store.id)">
                 <div class="store_img"><img :src="store.logoUrl"></div>
                 <div class="store_name">{{store.name}}</div>
             </div>
@@ -213,6 +213,9 @@
         var anchor = this.$el.querySelector(selector)
         document.body.scrollTop = anchor.offsetTop - 120
         this.browseButtonState = false
+      },
+      toStore (id) {
+        this.$router.push({name: 'Store', params: {id: id}})
       },
       fetchData: function (id) {
         getMarketLoad(this.$store.state, {'id': id})

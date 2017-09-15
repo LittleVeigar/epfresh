@@ -53,7 +53,7 @@
 <router-link to="/beihuan">
   <span class="city-name">
     <span>
-      {{city_name}}
+      {{city}}
     </span>
     <i></i>
   </span>
@@ -81,6 +81,10 @@
       },
       list: {
         type: Array
+      },
+      city: {
+        type: String,
+        default: '上海市'
       }
     },
     ready () {

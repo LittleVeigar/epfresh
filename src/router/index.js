@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-// import StoreState from '../store/index'
+import StoreState from '../store/index'
 const Login = r => require.ensure([], () => r(require('@/page/login/login')), 'login')
 const FastSign = r => require.ensure([], () => r(require('@/page/login/children/fastSign')), 'fastSign')
 const ForgetCode = r => require.ensure([], () => r(require('@/page/login/children/forgetCode')), 'forgetCode')
@@ -158,26 +158,20 @@ let router = new Router({
     }
   ]
 })
-// console.log(StoreState.state.phone)
-// let vueInstance = new Vue()
-// router.beforeEach((to, from, next) => {
-//   if (to.path.startsWith('/login')) {
-//     StoreState.state.token = ''
-//     next()
-//   } else {
-//     if (to.path === '/businessManage') {
-//       // 传递数据
-//       vueInstance.$emit('changeTitle', {showTabar: true, path: to.path})
-//     } else {
-//       // 传递数据
-//       vueInstance.$emit('changeTitle', {showTabar: false, path: to.path})
-//     }
-//     let token = StoreState.state.token
-//     if (!token) {
-//       next({path: '/login'})
-//     } else {
-//       next()
-//     }
-//   }
-// })
+
+console.log(StoreState)
+router.beforeEach((to, from, next) => {
+  console.log(to.path)
+  if (to.path === '/login') {
+    StoreState.state.token = ''
+    next()
+  } else {
+    let token = StoreState.state.token
+    if (!token) {
+      next({path: '/login'})
+    } else {
+      next()
+    }
+  }
+})
 export default router

@@ -12,6 +12,15 @@
           </div>
         </div>
         <div id="r-result"></div>
+        <form method="post" accept="upload/img" enctype="multipart/form-data">
+          <div class="field required">
+            <label>头像</label>
+            <input type="file" name="">
+            <input type="image" name="avatar">
+          </div>
+           <input type="submit" class="ui button fluid" value="提交表单">
+        </form>
+        <canvas id="canvas"></canvas>
   </div>
 </template>
 
@@ -105,7 +114,27 @@ new Vue({
       },
       onTouchStart () {
         console.log('start')
+      },
+      draw () {
+        var ctx = document.getElementById('canvas').getContext('2d')
+        var lingrad = ctx.createLinearGradient(0, 0, 0, 150)
+        lingrad.addColorStop(0, '#00ABEB')
+        lingrad.addColorStop(0.5, '#fff')
+        lingrad.addColorStop(0.5, '#26C000')
+        lingrad.addColorStop(1, '#fff')
+
+        var lingrad2 = ctx.createLinearGradient(0, 50, 0, 95)
+        lingrad2.addColorStop(0.5, '#000')
+        lingrad2.addColorStop(1, 'rgba(0, 0, 0, 0)')
+
+        ctx.fillStyle = lingrad
+        ctx.strokeStyle = lingrad2
+        ctx.fillRect(10, 10, 130, 130)
+        ctx.strokeRect(50, 50, 50, 50)
       }
+    },
+    mounted () {
+      this.draw()
     }
 })
 </script>

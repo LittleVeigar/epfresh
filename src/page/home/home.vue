@@ -177,7 +177,7 @@ section {
 
 <template>
   <div class="hello">
-  <ep-header  ></ep-header>
+  <ep-header  v-bind:city="city_name" ></ep-header>
   <NavBar v-bind:market-list="marketlist" :show-market="showMarket" v-on:showMarkets = "changMarkets"></NavBar>
  <router-view></router-view>
  <div class="mask" :class="[showMarket?'dispb':'']"></div>
@@ -237,7 +237,9 @@ export default {
   computed: {
     ...mapState([
       'menuIndex',
-      'hidemenu'
+      'hidemenu',
+      'city_name',
+      'city_code'
     ])
   },
   methods: {
@@ -255,7 +257,7 @@ export default {
         this.topBanner = dat.topBanner
         this.shopList = dat.shopOpening.shopList
       })
-      getMarketList()
+      getMarketList(this.city_code)
       .then(data => {
         let dat = data.data.response
         this.marketlist = dat

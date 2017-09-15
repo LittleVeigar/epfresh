@@ -30,7 +30,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/apitest': {
-        target: 'http://10.250.112.237:8888',
+        target: 'http://10.250.112.224:8888',
         changeOrigin:true,
         pathRewrite: {
           '^/cgi': '/cgi'

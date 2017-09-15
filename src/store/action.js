@@ -43,8 +43,8 @@ export default {
   async setCityLocation ({
     commit,
     state
-  }) {
-    commit(CITY_LOCATION)
+  }, city) {
+    commit(CITY_LOCATION, { cityName: city.name, cityCode: city.code })
   },
   async setAccountLogin ({
     commit,

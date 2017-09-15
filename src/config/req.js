@@ -1,13 +1,14 @@
 
 import axios from 'axios'
 import { Toast } from 'mint-ui'
+// import StoreState from '../store/index'
 export let base = 'http://apitest.epfresh.com/cgi'
 export let deviceInfo = {'os': 'android', 'model': 'HM NOTE 1LTE', 'osVersion': '4.4.4'}
-export let cid = 'ffffffff-9512-f7ac-ffff-fffff71d2617'
+export let cid = '00000000-01c2-ab32-0000-00000a892960'
 let configcityId = '6401'
 let config = {
   'appDomain': 'purchaser',
-  'appVersion': '2.3.143',
+  'appVersion': '2.3.205',
   'cmd': '',
   'cityId': configcityId,
   'clientIdentifierCode': cid,
@@ -84,7 +85,7 @@ const getPartproductList = (params, store) => { return Post({'cmd': 'product/lis
  * [getMarketList 批发市场列表]
  * @return {[type]} [description]
  */
-const getMarketList = () => { return Post({'cmd': 'store/market/list4purchaser'}) }
+const getMarketList = (cityId) => { return Post({'cmd': 'store/market/list4purchaser', 'cityId': cityId}) }
 
 /**
  * [getStoreList 店铺列表]

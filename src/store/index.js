@@ -9,6 +9,7 @@ const state = {
   menuIndex: 1,
   hidemenu: true,
   city_name: '上海市',
+  city_code: 31,
   accountId: '',
   token: '',
   loginStatus: '',

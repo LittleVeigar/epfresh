@@ -124,7 +124,7 @@ a {
     top: 0;
   }
   img {
-    width: auto;
+    width: 100%;
     max-width: 100%;
   }
 }

@@ -127,9 +127,6 @@
   .dispb {
     display:block;
   }
-//   input:-webkit-autofill {
-//     -webkit-box-shadow: 0 0 0px 1000px rgba(244,240,239,1) inset !important;
-// }
 input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
   background-color:rgba(0,0,0,1)!important;
 }
@@ -207,8 +204,7 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
 
             this.setAccountLogin(account)
             if (data.data.error === null) {
-              // this.$router.push({ path: '/home' })
-              this.$router.go(-1)
+              this.$router.push({ path: '/home' })
             } else if (data.data.error.errorInfo !== '') {
               this.show = false
               this.errorInfo = data.data.error.errorInfo

@@ -36,7 +36,7 @@
 
 <script >
   import { getOpenCityAndMerAddress } from '@/config/req'
-  import { mapMutations } from 'vuex'
+  import { mapMutations, mapActions } from 'vuex'
   import BMap from 'BMap'
   export default {
     data () {
@@ -55,14 +55,14 @@
     mounted () {
       this.HIDE_MENU({ hidemenu: this.hide })
       // 百度地图API功能
-      let _this = this
+      // let _this = this
       let map = new BMap.Map('allmap')
       let point = new BMap.Point(116.331398, 39.897445)
       map.centerAndZoom(point, 12)
       function myFun (result) {
         let cityName = result.name
         map.setCenter(cityName)
-        _this.city = cityName
+        // _this.city = cityName
         console.log(result.center.lat)
       }
       let myCity = new BMap.LocalCity()
@@ -72,11 +72,20 @@
       ...mapMutations([
         'HIDE_MENU'
       ]),
+      ...mapActions([
+        'setCityLocation'
+      ]),
       chooseCity: function (index) {
         this.selectCity = index
+        var city = this.citys[index]
+        this.city = city.name
+        console.log(city)
+        this.setCityLocation(city)
+        console.log(this.$store.state)
+        this.$router.push({ path: '/home' })
       },
       fetchData () {
-        getOpenCityAndMerAddress(this.$store.state, {'version': 44})
+        getOpenCityAndMerAddress({'version': '0'})
         .then(data => {
           let dat = data.data.response
           this.citys = dat.city.cityList

@@ -655,12 +655,11 @@ export default {
       return this.edit ? '编辑' : '完成'
     },
     unproduct: function () {
-      if (this.content.content === undefined) {
+      console.log('unpro', this.content.shopingCarCnt === 0)
+      if (this.content.shopingCarCnt === 0) {
         return true
       } else {
-        this.content.content.some(function (item) {
-          return item.result.length > 0
-        })
+        return false
       }
     }
   },

@@ -35,10 +35,9 @@ export default {
   }) {
     state.hidemenu = hidemenu
   },
-  [CITY_LOCATION] (state, {
-    city
-  }) {
-    state.city_name = city
+  [CITY_LOCATION] (state, { cityName, cityCode }) {
+    state.city_name = cityName
+    state.city_code = cityCode
   },
   [REMEMBER_PHONE] (state, {
     phone
