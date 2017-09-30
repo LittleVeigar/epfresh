@@ -1,11 +1,12 @@
 
 import axios from 'axios'
 import { Toast } from 'mint-ui'
-// import StoreState from '../store/index'
-export let base = 'http://apitest.epfresh.com/cgi'
+import StoreState from '../store/index'
+export let base = 'http://apifort.epfresh.com/cgi'
 export let deviceInfo = {'os': 'android', 'model': 'HM NOTE 1LTE', 'osVersion': '4.4.4'}
 export let cid = '00000000-01c2-ab32-0000-00000a892960'
 let configcityId = '6401'
+
 let config = {
   'appDomain': 'purchaser',
   'appVersion': '2.3.205',
@@ -20,7 +21,7 @@ const Post = (data) => {
     axios({
       method: 'post',
       url: base,
-      data: Object.assign({}, config, data)
+      data: Object.assign({}, config, { 'cityId': StoreState.state.city_code }, data)
     })
     .then(response => {
       resolve(response)

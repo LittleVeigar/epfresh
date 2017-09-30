@@ -198,10 +198,7 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
           this.rememberLastPhone(this.form.id)
           loginAccount({phone: this.form.id, password: this.form.name})
           .then(data => {
-            let { accountId, token } = data.data.response
             let account = data.data.response
-            console.log(accountId, token)
-
             this.setAccountLogin(account)
             if (data.data.error === null) {
               this.$router.push({ path: '/home' })

@@ -167,7 +167,9 @@ router.beforeEach((to, from, next) => {
     next()
   } else {
     let token = StoreState.state.token
-    if (!token) {
+    if (from.path === '/login') {
+      next()
+    } else if (!token) {
       next({path: '/login'})
     } else {
       next()

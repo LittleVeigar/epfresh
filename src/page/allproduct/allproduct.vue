@@ -820,7 +820,7 @@ export default {
       })
       .then(products => {
         console.log('products:', products)
-        getShoppingCarCntNew(this.$store.state, {'cityId': '6401', 'accountId': this.$store.state.accountId})
+        getShoppingCarCntNew(this.$store.state, {'cityId': this.$store.state.city_code, 'accountId': this.$store.state.accountId})
         .then(data => {
           this.shoppingCar = data.data.response
           console.log('products:', products)
@@ -851,7 +851,7 @@ export default {
       })
     },
     gainCartCnt () {
-      getShoppingCarCntNew(this.$store.state, {'cityId': '6401', 'accountId': this.$store.state.accountId})
+      getShoppingCarCntNew(this.$store.state, {'cityId': this.$store.state.city_code, 'accountId': this.$store.state.accountId})
       .then(data => {
         this.shoppingCar = data.data.response
         let content = this.products.content
@@ -926,7 +926,7 @@ export default {
       }
     },
     ToProductDetail (id) {
-      window.location.href = 'http://mtest.epfresh.com/common/product.html?#' + id + '&6401'
+      window.location.href = 'http://mtest.epfresh.com/common/product.html?#' + id + '&' + this.$store.state.city_code
     },
     showToast () {
       Toast('这是一个Toast！')
