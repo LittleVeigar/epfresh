@@ -9,16 +9,19 @@ npm install
 
 ```
 
-### 编译环境
+### 缂栬瘧鐜
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/LittleVeigar/epfresh.svg)](https://greenkeeper.io/)
+
 ```
 npm run dev
 
-访问 http://localhost:8000
+璁块棶 http://localhost:8000
 ```
 
 
-### 线上版本
+### 绾夸笂鐗堟湰
 ```
 npm run build
 
-生成的dist文件夹放在服务器即可正常访问
+鐢熸垚鐨刣ist鏂囦欢澶规斁鍦ㄦ湇鍔″櫒鍗冲彲姝ｅ父璁块棶
